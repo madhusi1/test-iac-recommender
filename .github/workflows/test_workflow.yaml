@@ -1,4 +1,4 @@
-name: IaC Remediation Semi-Autonomous Workflow
+name: Test Workflow
 
 on:
   workflow_dispatch:
