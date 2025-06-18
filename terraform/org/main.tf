@@ -44,3 +44,16 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# Remove serviceAccountAdmin role for user:balajiramani@google.com from service account p4sa-service-account-test
+resource "google_service_account_iam_member_remove" "remove_service_account_admin_for_balaji" {
+  service_account_id = "p4sa-service-account-test"
+  role               = "roles/iam.serviceAccountAdmin"
+  member             = "user:balajiramani@google.com"
+}
+
+# Add serviceAccountCreator role for user:balajiramani@google.com to service account p4sa-service-account-test
+resource "google_service_account_iam_member" "add_service_account_creator_for_balaji" {
+  service_account_id = "p4sa-service-account-test"
+  role               = "roles/iam.serviceAccountCreator"
+  member             = "user:balajiramani@google.com"
+}
