@@ -44,3 +44,30 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# --- IAM Bindings for project sdw-data-ing-92a872-14bc ---
+
+# Add roles for group:slz-blr@google.com on project sdw-data-ing-92a872-14bc
+resource "google_project_iam_member" "iam_member_slz_blr_cloudbuild_viewer" {
+  project = "sdw-data-ing-92a872-14bc"
+  role    = "roles/cloudbuild.builds.viewer"
+  member  = "group:slz-blr@google.com"
+}
+
+resource "google_project_iam_member" "iam_member_slz_blr_dataflow_developer" {
+  project = "sdw-data-ing-92a872-14bc"
+  role    = "roles/dataflow.developer"
+  member  = "group:slz-blr@google.com"
+}
+
+# Remove roles for group:slz-blr@google.com on project sdw-data-ing-92a872-14bc
+resource "google_project_iam_member_remove" "iam_member_remove_slz_blr_cloudbuild_editor" {
+  project = "sdw-data-ing-92a872-14bc"
+  role    = "roles/cloudbuild.builds.editor"
+  member  = "group:slz-blr@google.com"
+}
+
+resource "google_project_iam_member_remove" "iam_member_remove_slz_blr_dataflow_admin" {
+  project = "sdw-data-ing-92a872-14bc"
+  role    = "roles/dataflow.admin"
+  member  = "group:slz-blr@google.com"
+}
