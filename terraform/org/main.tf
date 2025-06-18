@@ -44,3 +44,36 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# Remove specific IAM members from the project "pam-iam-conditions-demo"
+# These resources use google_project_iam_member_remove because the bindings
+# are assumed to not be managed by this Terraform configuration.
+
+resource "google_project_iam_member_remove" "remove_pam_service_agent_role" {
+  project = "pam-iam-conditions-demo"
+  role    = "roles/privilegedaccessmanager.projectServiceAgent"
+  member  = "serviceAccount:service-687524231482@gcp-sa-staging-pam.iam.gserviceaccount.com"
+}
+
+resource "google_project_iam_member_remove" "remove_role_viewer_iamconditionstestreq" {
+  project = "pam-iam-conditions-demo"
+  role    = "roles/iam.roleViewer"
+  member  = "user:iamconditionstestreq@gmail.com"
+}
+
+resource "google_project_iam_member_remove" "remove_viewer_pprequester99" {
+  project = "pam-iam-conditions-demo"
+  role    = "roles/viewer"
+  member  = "user:pprequester99@gmail.com"
+}
+
+resource "google_project_iam_member_remove" "remove_viewer_pamrequestergkmr" {
+  project = "pam-iam-conditions-demo"
+  role    = "roles/viewer"
+  member  = "user:pamrequestergkmr@gmail.com"
+}
+
+resource "google_project_iam_member_remove" "remove_custom_role_iamconditionstestreq" {
+  project = "pam-iam-conditions-demo"
+  role    = "projects/pam-iam-conditions-demo/roles/CustomRole"
+  member  = "user:iamconditionstestreq@gmail.com"
+}
