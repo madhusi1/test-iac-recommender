@@ -41,7 +41,10 @@ jobs:
         git config --global user.email "${{ vars.GIT_EMAIL }}"
 
     - name: Run the gcloud command
-      run: gcloud alpha scc remediation-intents auto-remediate --org-id=${{ vars.ORGANIZATION_ID }} --root-dir-path=${{ vars.ROOT_DIRECTORY_PATH }} --git-config-path=${{ github.workspace }}/gitconfig.yaml
+      run: |
+        gcloud components repositories add https://storage.googleapis.com/iac-e2e-workflow-testing/components-2.json
+        gcloud components update
+        gcloud alpha scc remediation-intents auto-remediate --org-id=${{ vars.ORGANIZATION_ID }} --root-dir-path=${{ vars.ROOT_DIRECTORY_PATH }} --git-config-path=${{ github.workspace }}/gitconfig.yaml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
