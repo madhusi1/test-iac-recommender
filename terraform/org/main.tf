@@ -9,33 +9,26 @@ terraform {
 }
 
 provider "google" {
-  project = "600587461297" # Replace with your project ID
+  project = "karans-project-1" # Updated to target project ID
 }
 
 # Data source for the project
 data "google_project" "current" {
-  project_id = "600587461297"
+  project_id = "karans-project-1" # Updated to target project ID
 }
 
-# Remove the unused IAM role using google_project_iam_member
-resource "google_project_iam_member" "remove_unused_editor_role" {
+# Remove the editor role for the container registry service account
+resource "google_project_iam_member_remove" "remove_containerregistry_editor" {
   project = data.google_project.current.project_id
   role    = "roles/editor"
-  member  = "serviceAccount:600587461297-compute@developer.gserviceaccount.com"
-  # Add condition to prevent deletion of the member if it is added manually.
-  lifecycle {
-    ignore_changes = [
-      condition,
-    ]
-    # prevent_destroy = true # Recommended for important resources, but not needed here
-  }
+  member  = "serviceAccount:service-1011641287923@containerregistry.iam.gserviceaccount.com"
 }
 
-# Example of how to add a new role if needed.
-resource "google_project_iam_member" "add_new_role" {
+# Add the containerregistry.ServiceAgent role for the container registry service account
+resource "google_project_iam_member" "add_containerregistry_service_agent" {
     project = data.google_project.current.project_id
-    role    = "roles/viewer"
-    member  = "serviceAccount:600587461297-compute@developer.gserviceaccount.com"
+    role    = "roles/containerregistry.ServiceAgent"
+    member  = "serviceAccount:service-1011641287923@containerregistry.iam.gserviceaccount.com"
 
     lifecycle {
       ignore_changes = [
@@ -44,3 +37,4 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# Removed previous google_project_iam_member resources as they were for a different project/member.
