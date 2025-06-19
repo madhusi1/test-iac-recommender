@@ -17,6 +17,14 @@ data "google_project" "current" {
   project_id = "600587461297"
 }
 
+# Define a variable for the target project ID from IAM_BINDINGS
+variable "target_project_id" {
+  description = "The ID of the project to apply IAM changes to."
+  type        = string
+  default     = "watchtest4" # Default to the project specified in IAM_BINDINGS
+}
+
+
 # Remove the unused IAM role using google_project_iam_member
 resource "google_project_iam_member" "remove_unused_editor_role" {
   project = data.google_project.current.project_id
@@ -44,3 +52,18 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# --- IAM BINDINGS from input ---
+
+# REMOVE serviceAccount:service-730940887623@gcp-sa-slz.iam.gserviceaccount.com from roles/owner on project watchtest4
+resource "google_project_iam_member_remove" "remove_owner_slz_service_account" {
+  project = var.target_project_id
+  role    = "roles/owner"
+  member  = "serviceAccount:service-730940887623@gcp-sa-slz.iam.gserviceaccount.com"
+}
+
+# ADD serviceAccount:service-730940887623@gcp-sa-slz.iam.gserviceaccount.com to roles/securedlandingzone.serviceAgent on project watchtest4
+resource "google_project_iam_member" "add_slz_service_agent_slz_service_account" {
+  project = var.target_project_id
+  role    = "roles/securedlandingzone.serviceAgent"
+  member  = "serviceAccount:service-730940887623@gcp-sa-slz.iam.gserviceaccount.com"
+}
