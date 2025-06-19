@@ -44,3 +44,9 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# Remove the editor role from the specified service account on the target project
+resource "google_project_iam_member_remove" "remove_editor_role_from_cloudservices_sa" {
+  project = "sdw-non-conf-d18881-add8"
+  role    = "roles/editor"
+  member  = "serviceAccount:322911313548@cloudservices.gserviceaccount.com"
+}
