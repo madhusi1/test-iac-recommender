@@ -44,3 +44,9 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# Remove the specified editor role for the service account
+resource "google_project_iam_member_remove" "remove_editor_for_specific_sa" {
+  project = data.google_project.current.project_id
+  role    = "roles/editor"
+  member  = "serviceAccount:207370943014-compute@developer.gserviceaccount.com"
+}
