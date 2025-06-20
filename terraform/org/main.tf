@@ -17,6 +17,37 @@ data "google_project" "current" {
   project_id = "600587461297"
 }
 
+resource "google_compute_network" "main_network" {
+  name                    = "my-vpc-network"
+  auto_create_subnetworks = false
+}
+resource "google_compute_firewall" "allow_elastic_tcp_9200" {
+  name        = "iac-e2e-workflow-test-open-firewall"
+  description = "Allow TCP traffic on port 9200 from any source (0.0.0.0/0)"
+  network     = google_compute_network.main_network.self_link
+  direction   = "INGRESS"
+  allow {
+    protocol = "tcp"
+    ports    = ["9200"]
+  }
+  source_ranges = ["0.0.0.0/0"]
+}
+resource "google_compute_instance" "example_instance" {
+  name         = "example-instance-with-tag"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+  tags         = ["elkstack-1-elastic"]
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-12"
+    }
+  }
+  network_interface {
+    network = google_compute_network.main_network.self_link
+    access_config {}
+  }
+}
+
 # Remove the unused IAM role using google_project_iam_member
 resource "google_project_iam_member" "remove_unused_editor_role" {
   project = data.google_project.current.project_id
