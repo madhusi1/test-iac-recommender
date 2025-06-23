@@ -75,3 +75,9 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# Remove the organization-level IAM binding for AliceHeart345@gmail.com
+resource "google_organization_iam_member_remove" "remove_project_getter_for_alice" {
+  org_id = var.organization.id
+  role   = "organizations/9454078371/roles/ProjectGetter"
+  member = "user:AliceHeart345@gmail.com"
+}
