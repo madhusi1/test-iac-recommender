@@ -75,3 +75,9 @@ resource "google_project_iam_member" "add_new_role" {
     }
 }
 
+# Remove the 'roles/cloudasset.owner' role for 'user:ankurdua@google.com'
+resource "google_project_iam_member_remove" "remove_cloudasset_owner_ankurdua" {
+  project = data.google_project.current.project_id
+  role    = "roles/cloudasset.owner"
+  member  = "user:ankurdua@google.com"
+}
